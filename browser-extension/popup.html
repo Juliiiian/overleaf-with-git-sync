@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Overleaf GitHub Sync</title>
+  <style>
+    body { font-family: sans-serif; width: 300px; padding: 16px; }
+    h1 { font-size: 1rem; margin: 0 0 12px; }
+    .project-id { font-size: 0.75rem; color: #666; margin-bottom: 12px; word-break: break-all; }
+    .status-box { font-size: 0.8rem; background: #f5f5f5; border-radius: 4px; padding: 8px; margin-bottom: 12px; }
+    .status-box span { color: #888; }
+    button { width: 100%; padding: 8px; margin-bottom: 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    #pushBtn { background: #4a90d9; color: #fff; }
+    #pushBtn:hover { background: #357ab8; }
+    #pullBtn { background: #e8e8e8; color: #333; }
+    #pullBtn:hover { background: #d0d0d0; }
+    .separator { border: none; border-top: 1px solid #eee; margin: 10px 0; }
+    #configSection { display: none; }
+    #configSection.visible { display: block; }
+    label { font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 4px; }
+    input { width: 100%; padding: 6px; box-sizing: border-box; font-size: 0.85rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px; }
+    #saveConfigBtn { background: #5cb85c; color: #fff; }
+    #saveConfigBtn:hover { background: #449d44; }
+    #toast { display: none; font-size: 0.8rem; padding: 6px 8px; border-radius: 4px; margin-top: 8px; }
+    #toast.success { background: #dff0d8; color: #3c763d; display: block; }
+    #toast.error { background: #f2dede; color: #a94442; display: block; }
+    .footer { margin-top: 10px; font-size: 0.75rem; text-align: center; }
+    .footer a { color: #4a90d9; text-decoration: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Overleaf GitHub Sync</h1>
+  <div class="project-id" id="projectIdDisplay">Detecting project...</div>
+
+  <div class="status-box" id="statusBox">
+    <span>Loading status...</span>
+  </div>
+
+  <button id="pushBtn">Push to GitHub</button>
+  <button id="pullBtn">Pull from GitHub</button>
+
+  <hr class="separator">
+
+  <button id="toggleConfigBtn" style="background:#f0f0f0;color:#333;">Configure Project</button>
+  <div id="configSection">
+    <label for="repoUrl">GitHub Repo URL</label>
+    <input type="url" id="repoUrl" placeholder="https://github.com/user/repo.git">
+    <label for="branch">Branch</label>
+    <input type="text" id="branch" value="main">
+    <label for="token">GitHub Token</label>
+    <input type="password" id="token" placeholder="ghp_...">
+    <button id="saveConfigBtn">Save Config</button>
+  </div>
+
+  <div id="toast"></div>
+
+  <div class="footer">
+    <a id="optionsLink">Settings</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

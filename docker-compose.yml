@@ -1,0 +1,73 @@
+services:
+  mongo:
+    image: mongo:6
+    restart: always
+    networks:
+      - overleaf_net
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - overleaf_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  sharelatex:
+    image: overleaf/overleaf:latest
+    restart: always
+    networks:
+      - overleaf_net
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      OVERLEAF_MONGO_URL: mongodb://mongo/sharelatex
+      OVERLEAF_REDIS_HOST: redis
+      OVERLEAF_REDIS_PORT: 6379
+    volumes:
+      - sharelatex_data:/var/lib/overleaf
+
+  sync-service:
+    build:
+      context: ./sync-service
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - overleaf_net
+    depends_on:
+      - sharelatex
+    env_file: .env
+    environment:
+      OVERLEAF_DATA_PATH: /var/lib/overleaf/data/user_files
+      SYNC_CONFIG_PATH: /sync/config/metadata.json
+      SYNC_REPOS_PATH: /sync/repos
+      SYNC_LISTEN_ADDR: ":8080"
+    volumes:
+      - sharelatex_data:/var/lib/overleaf
+      - sync_repos:/sync/repos
+      - sync_config:/sync/config
+
+networks:
+  overleaf_net:
+    driver: bridge
+
+volumes:
+  sharelatex_data:
+  mongo_data:
+  redis_data:
+  sync_repos:
+  sync_config:

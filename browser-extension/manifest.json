@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Overleaf GitHub Sync",
+  "version": "1.0.0",
+  "description": "Manually sync Overleaf projects to GitHub via a self-hosted sync service.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://*/*", "http://localhost/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["*://*/project/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

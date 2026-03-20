@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Overleaf GitHub Sync — Options</title>
+  <style>
+    body { font-family: sans-serif; padding: 24px; max-width: 480px; }
+    h1 { font-size: 1.2rem; margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; font-size: 0.9rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { margin-top: 12px; padding: 8px 18px; background: #4a90d9; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    button:hover { background: #357ab8; }
+    #status { margin-top: 10px; font-size: 0.85rem; color: green; }
+    .hint { font-size: 0.8rem; color: #666; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Overleaf GitHub Sync — Settings</h1>
+  <label for="syncUrl">Sync Service Base URL</label>
+  <input type="url" id="syncUrl" placeholder="https://latex.example.com">
+  <p class="hint">The base URL of your Overleaf instance. The extension appends <code>/sync/...</code> automatically.</p>
+  <button id="save">Save</button>
+  <div id="status"></div>
+  <script src="options.js"></script>
+</body>
+</html>
