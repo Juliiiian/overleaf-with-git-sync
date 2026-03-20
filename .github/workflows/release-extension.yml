@@ -1,0 +1,52 @@
+name: Release Browser Extension
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install web-ext
+        run: npm install -g web-ext
+
+      # Chrome: zip the extension folder
+      - name: Build Chrome zip
+        run: |
+          cd browser-extension
+          zip -r ../overleaf-github-sync-chrome.zip . \
+            --exclude '*.zip' --exclude '*.xpi' \
+            --exclude 'package*.json' --exclude 'node_modules/*'
+
+      # Firefox: sign via Mozilla AMO (produces a .xpi)
+      - name: Sign Firefox extension
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+        run: |
+          web-ext sign \
+            --source-dir browser-extension \
+            --artifacts-dir . \
+            --api-key "$WEB_EXT_API_KEY" \
+            --api-secret "$WEB_EXT_API_SECRET"
+        continue-on-error: true  # skip if secrets not configured
+
+      # Upload both as release assets
+      - name: Upload Chrome zip
+        uses: softprops/action-gh-release@v2
+        with:
+          files: overleaf-github-sync-chrome.zip
+
+      - name: Upload Firefox xpi
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.xpi"
+        continue-on-error: true  # skip if signing failed

@@ -1,0 +1,12 @@
+{
+  "name": "overleaf-github-sync",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:zip": "cd .. && zip -r browser-extension/overleaf-github-sync.zip browser-extension/ --exclude '*.zip' --exclude '*.xpi' --exclude 'node_modules/*' --exclude 'package*.json'",
+    "sign:firefox": "web-ext sign --source-dir . --artifacts-dir . --api-key $WEB_EXT_API_KEY --api-secret $WEB_EXT_API_SECRET"
+  },
+  "devDependencies": {
+    "web-ext": "^8.0.0"
+  }
+}

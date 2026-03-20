@@ -94,22 +94,41 @@ The default expected path is `/var/lib/overleaf/data/user_files/<project_id>/`. 
 
 ## Browser Extension
 
-### Install in Chrome
+### Install — Chrome (click install)
 
-1. Open `chrome://extensions`
-2. Enable **Developer mode** (toggle in the top-right corner)
-3. Click **Load unpacked**
-4. Select the `browser-extension/` folder from this repo
+1. Go to the [latest GitHub Release](https://github.com/Juliiiian/overleaf--with-git-sync/releases/latest)
+2. Download `overleaf-github-sync-chrome.zip`
+3. Unzip it somewhere permanent (e.g. `~/extensions/overleaf-sync/`)
+4. Open `chrome://extensions`
+5. Enable **Developer mode** (toggle in the top-right corner)
+6. Click **Load unpacked** and select the unzipped folder
 
-The extension icon will appear in your toolbar.
+> Chrome does not allow true one-click installs from outside the Chrome Web Store. "Load unpacked" is the closest alternative for self-hosted extensions. The folder must stay in place — don't move or delete it after loading.
 
-### Install in Firefox
+**Optional: publish to Chrome Web Store (unlisted)**
+If you want a real click-to-install link for Chrome, you can publish the extension as **unlisted** on the Chrome Web Store. Only people with the direct link can find it.
+1. Pay the one-time $5 developer fee at [chrome.google.com/webstore/devconsole](https://chrome.google.com/webstore/devconsole)
+2. Upload `overleaf-github-sync-chrome.zip` (from releases)
+3. Set visibility to **Unlisted**
+4. Share the store link with anyone who needs it — they install with one click, no developer mode needed
 
+### Install — Firefox (click install)
+
+Firefox supports installing signed `.xpi` files directly from a link.
+
+1. Go to the [latest GitHub Release](https://github.com/Juliiiian/overleaf--with-git-sync/releases/latest)
+2. Click the `.xpi` file — Firefox will prompt you to install it
+3. Click **Add**
+
+That's it. The extension persists across restarts and updates automatically when you publish a new release.
+
+> The `.xpi` is auto-generated and signed by Mozilla on each GitHub release via the workflow in `.github/workflows/release-extension.yml`. For this to work you need to add your Mozilla API credentials as GitHub secrets — see [Packaging a new release](#packaging-a-new-release) below.
+
+**Manual install (no release needed)**
 1. Open `about:debugging#/runtime/this-firefox`
 2. Click **Load Temporary Add-on...**
 3. Select `browser-extension/manifest.json`
-
-> Note: Temporary add-ons are removed when Firefox restarts. For a persistent install, package the extension as a `.xpi` or use Firefox Developer Edition.
+Note: temporary add-ons are removed when Firefox restarts.
 
 ### Configure the extension
 
@@ -188,6 +207,35 @@ overleaf--with-git-sync/
     ├── content.js       # scaffold for future toolbar button
     └── icons/
 ```
+
+---
+
+## Packaging a New Release
+
+When you push a new GitHub **Release**, the workflow in `.github/workflows/release-extension.yml` automatically:
+- Builds `overleaf-github-sync-chrome.zip` (for Chrome load-unpacked or Web Store upload)
+- Signs and builds `overleaf-github-sync-*.xpi` via Mozilla (for Firefox one-click install)
+- Attaches both files to the release
+
+### Set up Firefox signing (one time)
+
+1. Create a free account at [addons.mozilla.org](https://addons.mozilla.org)
+2. Go to **User menu → Developer Hub → Manage API Keys**
+3. Generate a JWT issuer key and secret
+4. In your GitHub repo go to **Settings → Secrets and variables → Actions** and add:
+   - `WEB_EXT_API_KEY` — your JWT issuer
+   - `WEB_EXT_API_SECRET` — your JWT secret
+
+### Trigger a release
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Then on GitHub: **Releases → Draft a new release → Choose tag v1.0.0 → Publish release**.
+
+The workflow runs automatically and attaches the extension files within a minute or two.
 
 ---
 
