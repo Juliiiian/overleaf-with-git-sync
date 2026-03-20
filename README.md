@@ -94,41 +94,36 @@ The default expected path is `/var/lib/overleaf/data/user_files/<project_id>/`. 
 
 ## Browser Extension
 
-### Install — Chrome (click install)
+### Install — Firefox
 
-1. Go to the [latest GitHub Release](https://github.com/Juliiiian/overleaf--with-git-sync/releases/latest)
-2. Download `overleaf-github-sync-chrome.zip`
-3. Unzip it somewhere permanent (e.g. `~/extensions/overleaf-sync/`)
-4. Open `chrome://extensions`
-5. Enable **Developer mode** (toggle in the top-right corner)
-6. Click **Load unpacked** and select the unzipped folder
+**[⬇ Click to install (Firefox)](https://github.com/Juliiiian/overleaf--with-git-sync/releases/latest/download/overleaf-github-sync-firefox.xpi)**
 
-> Chrome does not allow true one-click installs from outside the Chrome Web Store. "Load unpacked" is the closest alternative for self-hosted extensions. The folder must stay in place — don't move or delete it after loading.
+Firefox installs signed `.xpi` files directly — click the link above and hit **Add**. Done.
 
-**Optional: publish to Chrome Web Store (unlisted)**
-If you want a real click-to-install link for Chrome, you can publish the extension as **unlisted** on the Chrome Web Store. Only people with the direct link can find it.
-1. Pay the one-time $5 developer fee at [chrome.google.com/webstore/devconsole](https://chrome.google.com/webstore/devconsole)
-2. Upload `overleaf-github-sync-chrome.zip` (from releases)
-3. Set visibility to **Unlisted**
-4. Share the store link with anyone who needs it — they install with one click, no developer mode needed
-
-### Install — Firefox (click install)
-
-Firefox supports installing signed `.xpi` files directly from a link.
-
-1. Go to the [latest GitHub Release](https://github.com/Juliiiian/overleaf--with-git-sync/releases/latest)
-2. Click the `.xpi` file — Firefox will prompt you to install it
-3. Click **Add**
-
-That's it. The extension persists across restarts and updates automatically when you publish a new release.
-
-> The `.xpi` is auto-generated and signed by Mozilla on each GitHub release via the workflow in `.github/workflows/release-extension.yml`. For this to work you need to add your Mozilla API credentials as GitHub secrets — see [Packaging a new release](#packaging-a-new-release) below.
+> Requires that a release has been published with Firefox signing set up. See [Packaging a new release](#packaging-a-new-release).
 
 **Manual install (no release needed)**
 1. Open `about:debugging#/runtime/this-firefox`
 2. Click **Load Temporary Add-on...**
 3. Select `browser-extension/manifest.json`
+
 Note: temporary add-ons are removed when Firefox restarts.
+
+### Install — Chrome
+
+Chrome blocks one-click installs from outside the Web Store. The options are:
+
+**Option A — Load unpacked (developer mode, free)**
+1. Download [`overleaf-github-sync-chrome.zip`](https://github.com/Juliiiian/overleaf--with-git-sync/releases/latest/download/overleaf-github-sync-chrome.zip) and unzip it somewhere permanent
+2. Open `chrome://extensions`, enable **Developer mode**
+3. Click **Load unpacked** → select the unzipped folder
+
+The folder must stay in place after loading.
+
+**Option B — Chrome Web Store unlisted (one-click link, $5 one-time)**
+1. Pay the one-time $5 fee at [chrome.google.com/webstore/devconsole](https://chrome.google.com/webstore/devconsole)
+2. Upload `overleaf-github-sync-chrome.zip`, set visibility to **Unlisted**
+3. Anyone with the store link can install with one click — no developer mode needed
 
 ### Configure the extension
 

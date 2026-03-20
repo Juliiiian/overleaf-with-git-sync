@@ -26,17 +26,20 @@ jobs:
             --exclude '*.zip' --exclude '*.xpi' \
             --exclude 'package*.json' --exclude 'node_modules/*'
 
-      # Firefox: sign via Mozilla AMO (produces a .xpi)
+      # Firefox: sign via Mozilla AMO (produces a .xpi), then rename to a fixed filename
       - name: Sign Firefox extension
+        id: sign_firefox
         env:
           WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
           WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
         run: |
           web-ext sign \
             --source-dir browser-extension \
-            --artifacts-dir . \
+            --artifacts-dir ./firefox-artifacts \
             --api-key "$WEB_EXT_API_KEY" \
             --api-secret "$WEB_EXT_API_SECRET"
+          # Rename to a predictable filename so the README install link always works
+          mv firefox-artifacts/*.xpi overleaf-github-sync-firefox.xpi
         continue-on-error: true  # skip if secrets not configured
 
       # Upload both as release assets
@@ -48,5 +51,5 @@ jobs:
       - name: Upload Firefox xpi
         uses: softprops/action-gh-release@v2
         with:
-          files: "*.xpi"
+          files: overleaf-github-sync-firefox.xpi
         continue-on-error: true  # skip if signing failed
